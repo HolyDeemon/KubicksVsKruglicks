@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/GunScript.cs.meta
+guid: e8b22f9e3353b224fb594da3bfc7a74d
+========
+guid: 4dfec5b0006f72947ace8e6c38b557f6
+>>>>>>>> debd24afbfef5a5eb7885c250561c8ccc20b0eac:Assets/PlayerMover.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
