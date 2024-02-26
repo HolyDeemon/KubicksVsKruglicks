@@ -8,6 +8,11 @@ public class PlayerMover : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     public float Drag;
+    private float sprintmultiplier = 1f;
+    public float SprintMultiplier = 1.25f;
+    public KeyCode SprintKey = KeyCode.LeftShift;
+    public bool IsSprinting;
+    public float TotalMovingSpeed;
 
     [Header("Jumping")]
     public float jupmForce;
@@ -25,9 +30,11 @@ public class PlayerMover : MonoBehaviour
 
     private float horInput;
     private float verInput;
+    
+    
 
     private Vector3 moveDirection;
-
+    public GunScript gun;
     Rigidbody rb;
 
     private void Start()
@@ -46,6 +53,7 @@ public class PlayerMover : MonoBehaviour
 
         if (grounded) { rb.drag = Drag; }
         else { rb.drag = 0; }
+
     }
     private void FixedUpdate()
     {
@@ -56,6 +64,21 @@ public class PlayerMover : MonoBehaviour
     {
         horInput = Input.GetAxisRaw("Horizontal");
         verInput = Input.GetAxisRaw("Vertical");
+
+        IsSprinting = Input.GetKey(SprintKey) && verInput > 0;
+
+
+        if (IsSprinting && !gun.IsAiming)
+        {
+            sprintmultiplier = SprintMultiplier;
+            gun.IsOverWall = true;
+        }
+        else
+        {
+            sprintmultiplier = 1f;
+        }
+
+
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
@@ -64,24 +87,31 @@ public class PlayerMover : MonoBehaviour
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
+
     }
 
     private void MovePlayer()
     {
         moveDirection = orientation.forward * verInput + orientation.right * horInput;
 
-        rb.AddForce(moveDirection * moveSpeed * 10f,ForceMode.Force);
-        if (grounded) { rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force); }
-        else if (!grounded) { rb.AddForce(moveDirection * moveSpeed * 10f * airMultiplier, ForceMode.Force); }
+        var totalSpeed = moveSpeed * sprintmultiplier;
+
+        rb.AddForce(moveDirection * totalSpeed * 10f,ForceMode.Force);
+        if (grounded) { rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force); }
+        else if (!grounded) { rb.AddForce(moveDirection * totalSpeed * 10f * airMultiplier, ForceMode.Force); }
+
+        TotalMovingSpeed = rb.velocity.magnitude / moveSpeed;
     }
 
     private void SpeedControl()
     {
+        var totalSpeed = moveSpeed * sprintmultiplier;
+
         Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         if (flatVel.magnitude > moveSpeed)
         {
-            Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            Vector3 limitedVel = flatVel.normalized * totalSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
     }

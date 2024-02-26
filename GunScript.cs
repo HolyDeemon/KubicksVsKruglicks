@@ -1,80 +1,107 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class GunScript : MonoBehaviour
 {
-    public FPS_Camera camera;
-    public ParticleSystem[] Particles;
     public KeyCode[] kc;
-    public LayerMask whatIsGround; 
-    public bool shooted = false;
-    public float reload = 1;
+    public FPS_Camera camera;
+    public GameObject bulletPrefab;
+    public Transform Gun;
+    public LayerMask whatIsGround;
 
+    public string bulletEquped = "default";
 
-    private Vector3 Target_direction = Vector3.zero;
-    private Quaternion Target_rotation = Quaternion.identity;
-    void Update()
-    {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, Target_direction, 0.05f);
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, Target_rotation, 0.05f);
-        if (Input.GetKey(kc[1]))
-        {
-            camera.FOV = 50;
-            Target_direction = new Vector3(0, -0.27f, 0.539f);
-        }
-        else
-        {
-            camera.FOV = 75;
-            Target_direction = new Vector3(0.771f, -0.498f, 0.539f);
-        }
-        if (CheckWall(whatIsGround))
-        {
-            Target_rotation.eulerAngles = new Vector3 (-5, -90, 0);
-            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 2f, Color.red);
-        }
-        else
-        {
-            Target_rotation.eulerAngles = Vector3.zero;
-            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 2f, Color.blue); 
-            
-            if (Input.GetKeyDown(kc[0]))
-            {
-                shooted = true;
-                HeavyShoot();
-                Invoke("Reload", reload);
-                camera.kickback += 10;
-            }
+    public bool IsAiming = false;
+    public bool IsOverWall = false;
+    public bool ShootTrigger = false;
 
-        }
-    }
     
 
-
-
-    void HeavyShoot()
+    private Dictionary<string, List<float>> bulletDB = new Dictionary<string, List<float>>() // [0] - урон за попадание, [1] - скорость, [2] - кд, [3] - разброс, [4]- кол во пуль; 
     {
-        Particles[0].Play();
-        shooted = false;
-    }
-    void LightShoot()
+        {"default", new List<float>{5f, 100f, 1f, 0f, 1f}}, 
+        {"auto", new List<float>{2f, 20f, 0.2f, 5f, 1f}}, 
+        {"shot", new List<float>{1f, 15f, 2f, 45f, 10f}}, 
+        {"explode", new List<float>{10f, 0.1f, 4f, 0f, 1f}}
+    };
+    public Dictionary<string, float> Reloads = new Dictionary<string, float>()
     {
-        Particles[1].Play();
+        {"default", 0f},
+        {"auto", 0f},
+        {"shot", 0f},
+        {"explode", 0f}
+    };
+
+    void Update()
+    {
+        if (Input.GetKeyDown(kc[2]))
+        {
+            bulletEquped = "default";
+        }
+        if (Input.GetKeyDown(kc[3]))
+        {
+            bulletEquped = "auto";
+        }
+        if (Input.GetKeyDown(kc[4]))
+        {
+            bulletEquped = "shot";
+        }
+        if (Input.GetKeyDown(kc[5]))
+        {
+            bulletEquped = "explode";
+        }
+
+
+        IsAiming = Input.GetKey(kc[1]);
+        IsOverWall = CheckWall(whatIsGround);
+
+        if(bulletEquped == "auto")
+        {
+            if (Input.GetKey(kc[0]) && !IsOverWall && Reloads["auto"] == 0f)
+            {
+                ShootTrigger = true;
+                Shoot(bulletEquped);
+            }
+        }
+        else
+        {
+            if (Input.GetKeyDown(kc[0]) && !IsOverWall && Reloads[bulletEquped] == 0f)
+            {
+                ShootTrigger = true;
+                Shoot(bulletEquped);
+            }
+        }
+
+        Dictionary<string, float> ReloadTMP = new Dictionary<string, float>();
+        foreach (KeyValuePair<string, float> key in Reloads)
+        {
+            ReloadTMP.Add(key.Key, Mathf.Clamp(key.Value - Time.deltaTime, 0f, 1000f));
+        }
+        Reloads = ReloadTMP;
     }
 
-    void Reload()
+    void Shoot(string name)
     {
-        shooted = true;
-    }
+        float AimPenalty = 1f;
+        if(IsAiming)
+        {
+            AimPenalty = 1.5f;
+        }
 
+        Reloads[name] = bulletDB[name][2] * AimPenalty;
+
+        for (int i = 0; i < bulletDB[name][4]; i++)
+        { 
+            Vector3 accuracy = Quaternion.Euler(Random.Range(0, bulletDB[name][3] * 2) - bulletDB[name][3], Random.Range(0, bulletDB[name][3] * 2) - bulletDB[name][3], 0) * transform.forward;
+            var bullet = Instantiate(bulletPrefab);
+            bullet.transform.position = Gun.position;
+            bullet.GetComponent<BulletScript>().SetVars(name, accuracy, bulletDB[name][0], bulletDB[name][1]);
+        }
+    }
     public bool CheckWall(LayerMask Walls)
     {
         return Physics.Raycast(transform.position, camera.gameObject.transform.forward, 2.1f, Walls);
     }
-
-
-
 }

@@ -4930,6 +4930,7 @@ Transform:
   - {fileID: 2196344663607278775}
   - {fileID: 6621072958125208030}
   - {fileID: 3353499643053814194}
+  - {fileID: 4133391687452616566}
   m_Father: {fileID: 5225067328461189643}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1656614700858572632
@@ -14828,6 +14829,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5225067328461189643}
+  - component: {fileID: 5965438125495659921}
   - component: {fileID: 1097112270027927692}
   m_Layer: 0
   m_Name: Gun
@@ -14850,9 +14852,32 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1944324386700012247}
-  - {fileID: 3761742408778525184}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5965438125495659921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4364891102530889634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2fd22de91472654eb6f302f2f4832be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kc: 4301000044010000
+  camera: {fileID: 0}
+  bulletPrefab: {fileID: 1706435617503358407, guid: fba7e9f8a5730b34fb5f444bf2a746d9, type: 3}
+  Gun: {fileID: 4133391687452616566}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 1024
+  bulletEquped: default
+  IsAiming: 0
+  IsOverWall: 0
+  IsShooted: 0
+  ShootTrigger: 0
 --- !u!114 &1097112270027927692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14865,17 +14890,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8b22f9e3353b224fb594da3bfc7a74d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camera: {fileID: 0}
+  main: {fileID: 5965438125495659921}
   Particles:
   - {fileID: 6561684178308966477}
   - {fileID: 2061410166155814279}
-  kc: 4301000044010000
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 1024
-  shooted: 0
-  reload: 1
---- !u!1 &7023744084827233497
+--- !u!1 &4520418776762783040
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14883,26 +14902,26 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3761742408778525184}
+  - component: {fileID: 4133391687452616566}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GunPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3761742408778525184
+--- !u!4 &4133391687452616566
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7023744084827233497}
+  m_GameObject: {fileID: 4520418776762783040}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.00004708767, y: 0.67799985, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5225067328461189643}
+  m_Father: {fileID: 1944324386700012247}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
