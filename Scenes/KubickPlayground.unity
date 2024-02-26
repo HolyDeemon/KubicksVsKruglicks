@@ -376,6 +376,26 @@ PrefabInstance:
       propertyPath: orientation
       value: 
       objectReference: {fileID: 4429958543606804294}
+    - target: {fileID: 1477544314530551643, guid: 0e76af3517f868140ab7f2ebc5dc909e, type: 3}
+      propertyPath: kc.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477544314530551643, guid: 0e76af3517f868140ab7f2ebc5dc909e, type: 3}
+      propertyPath: kc.Array.data[2]
+      value: 49
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477544314530551643, guid: 0e76af3517f868140ab7f2ebc5dc909e, type: 3}
+      propertyPath: kc.Array.data[3]
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477544314530551643, guid: 0e76af3517f868140ab7f2ebc5dc909e, type: 3}
+      propertyPath: kc.Array.data[4]
+      value: 51
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477544314530551643, guid: 0e76af3517f868140ab7f2ebc5dc909e, type: 3}
+      propertyPath: kc.Array.data[5]
+      value: 52
+      objectReference: {fileID: 0}
     - target: {fileID: 4445136606493433096, guid: 0e76af3517f868140ab7f2ebc5dc909e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.006
