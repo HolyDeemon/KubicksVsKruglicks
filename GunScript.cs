@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GunScript : MonoBehaviour
@@ -16,15 +17,15 @@ public class GunScript : MonoBehaviour
     public bool IsAiming = false;
     public bool IsOverWall = false;
     public bool ShootTrigger = false;
-
+    public bool IsSprinting = false;
     
 
-    private Dictionary<string, List<float>> bulletDB = new Dictionary<string, List<float>>() // [0] - урон за попадание, [1] - скорость, [2] - кд, [3] - разброс, [4]- кол во пуль; 
+    private Dictionary<string, List<float>> bulletDB = new Dictionary<string, List<float>>() // [0] - урон за попадание, [1] - дистанция, [2] - кд, [3] - разброс, [4]- кол во пуль; 
     {
-        {"default", new List<float>{5f, 100f, 1f, 0f, 1f}}, 
+        {"default", new List<float>{5f, 1000f, 1f, 0f, 1f}}, 
         {"auto", new List<float>{2f, 20f, 0.2f, 5f, 1f}}, 
-        {"shot", new List<float>{1f, 15f, 2f, 45f, 10f}}, 
-        {"explode", new List<float>{10f, 0.1f, 4f, 0f, 1f}}
+        {"shot", new List<float>{1f, 5f, 2f, 45f, 10f}}, 
+        {"explode", new List<float>{10f, 20f, 4f, 0f, 1f}}
     };
     public Dictionary<string, float> Reloads = new Dictionary<string, float>()
     {
@@ -36,26 +37,10 @@ public class GunScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(kc[2]))
-        {
-            bulletEquped = "default";
-        }
-        if (Input.GetKeyDown(kc[3]))
-        {
-            bulletEquped = "auto";
-        }
-        if (Input.GetKeyDown(kc[4]))
-        {
-            bulletEquped = "shot";
-        }
-        if (Input.GetKeyDown(kc[5]))
-        {
-            bulletEquped = "explode";
-        }
-
+        WeaponSwapCheck();
 
         IsAiming = Input.GetKey(kc[1]);
-        IsOverWall = CheckWall(whatIsGround);
+        IsOverWall = CheckWall(whatIsGround, 1.7f) || IsSprinting;
 
         if(bulletEquped == "auto")
         {
@@ -81,11 +66,33 @@ public class GunScript : MonoBehaviour
         }
         Reloads = ReloadTMP;
     }
-
+    void WeaponSwapCheck()
+    {
+        if (Input.GetKeyDown(kc[2]))
+        {
+            bulletEquped = "default";
+        }
+        if (Input.GetKeyDown(kc[3]))
+        {
+            bulletEquped = "auto";
+        }
+        if (Input.GetKeyDown(kc[4]))
+        {
+            bulletEquped = "shot";
+        }
+        if (Input.GetKeyDown(kc[5]))
+        {
+            bulletEquped = "explode";
+        }
+    }
+    public bool CheckWall(LayerMask Walls, float ray)
+    {
+        return Physics.Raycast(transform.position, camera.gameObject.transform.forward, ray, Walls);
+    }
     void Shoot(string name)
     {
         float AimPenalty = 1f;
-        if(IsAiming)
+        if (IsAiming)
         {
             AimPenalty = 1.5f;
         }
@@ -93,15 +100,29 @@ public class GunScript : MonoBehaviour
         Reloads[name] = bulletDB[name][2] * AimPenalty;
 
         for (int i = 0; i < bulletDB[name][4]; i++)
-        { 
-            Vector3 accuracy = Quaternion.Euler(Random.Range(0, bulletDB[name][3] * 2) - bulletDB[name][3], Random.Range(0, bulletDB[name][3] * 2) - bulletDB[name][3], 0) * transform.forward;
-            var bullet = Instantiate(bulletPrefab);
-            bullet.transform.position = Gun.position;
-            bullet.GetComponent<BulletScript>().SetVars(name, accuracy, bulletDB[name][0], bulletDB[name][1]);
+        {
+            BulletRaycast(name, bulletDB);
         }
     }
-    public bool CheckWall(LayerMask Walls)
+    void BulletRaycast(string BulletName, Dictionary<string, List<float>> bullets)
     {
-        return Physics.Raycast(transform.position, camera.gameObject.transform.forward, 2.1f, Walls);
+        Vector3 accuracy = Quaternion.Euler(Random.Range(0, bullets[BulletName][3] * 2) - bullets[BulletName][3], Random.Range(0, bullets[BulletName][3] * 2) - bullets[BulletName][3], 0) * transform.forward;
+        var bullet = Instantiate(bulletPrefab);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(Gun.position, accuracy, out hit, bullets[BulletName][1]))
+        {
+            bullet.GetComponent<BulletScript>().BulletInitialiaze(BulletName, Gun.transform.position, hit.point);
+            bullet.GetComponent<BulletScript>().SummonDirt(hit.point, hit.normal);
+            return;
+        }
+        else
+        {
+            bullet.GetComponent<BulletScript>().BulletInitialiaze(BulletName, Gun.position, accuracy * bullets[BulletName][1] + Gun.position);
+        }
+
+
+        
     }
 }

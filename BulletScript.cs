@@ -2,36 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class BulletScript : MonoBehaviour
 {
-    private string name;
-    private Vector3 target;
-    private float damage;
-    private float speed;
-    private float LifeDelay;
+    private string named;
+    private float lifetime = 0.5f;
+    private LineRenderer lineRenderer;
 
-    private float Gravity;
-    void Update()
+    public ParticleSystem[] particle;
+    public GameObject explodePrefab;
+    private ParticleSystem explode;
+    private float initialSize;
+    private float initiallifetime;
+    private Vector3 end;
+
+    private void Update()
     {
-        LifeDelay += Time.deltaTime;
-        if(LifeDelay < 10f)
+        lifetime = Mathf.Clamp(lifetime - Time.deltaTime, 0, initiallifetime);
+        lineRenderer.widthMultiplier = initialSize * (lifetime / initiallifetime);
+        Debug.Log(named);
+        if (named == "explode")
         {
-            Gravity += 0.1f;
-            transform.position += target * speed;
-            transform.position += Vector3.down * Gravity;
+            SummonRocket(lineRenderer.GetPosition(0), explode.gameObject.transform.position);
         }
-        else
+        if (lifetime <= 0)
         {
             Destroy(gameObject);
         }
     }
 
-    public void SetVars(string NAME, Vector3 TARGET, float DAMAGE, float SPEED)
+    public void BulletInitialiaze(string NAME, Vector3 START, Vector3 TARGET)
     {
-        name = NAME;
-        target = TARGET;
-        damage = DAMAGE;
-        speed = SPEED;
+        lineRenderer = GetComponent<LineRenderer>();
+
+        initialSize = lineRenderer.widthMultiplier;
+        initiallifetime = lifetime;
+        named = NAME;
+        lineRenderer.SetPosition(0, START);
+        lineRenderer.SetPosition(1, TARGET);
+
+        if (name != "shot" || name != "explode")
+        {
+            SummonPiercedAir(START, TARGET);
+        }
     }
+    public void SummonDirt(Vector3 position, Vector3 normal)
+    {
+        normal += position;
+        Vector3 targetPosition = Vector3.Project(position, normal).magnitude * normal * 2 + position;
+
+        var Dirt = particle[0];
+        Dirt.gameObject.transform.position = position;
+        Dirt.gameObject.transform.LookAt(targetPosition);
+        Dirt.Play();
+    }
+
+    public void SummonPiercedAir(Vector3 start, Vector3 end)
+    {
+        for(int i = 5; i < (end - start).magnitude; i+=5) 
+        {
+            var air = Instantiate(particle[1].gameObject, gameObject.transform);
+            air.transform.position = start + (end - start).normalized * i;
+            air.GetComponent<ParticleSystem>().Play();
+        }
+    }
+
+    public void SummonRocket(Vector3 start, Vector3 end)
+    {
+        var rocketStar = particle[2];
+        rocketStar.Play();
+        rocketStar.gameObject.transform.position = start + (start - end).normalized * (1 - (lifetime / initiallifetime));
+        lineRenderer.SetPosition(1, rocketStar.gameObject.transform.position);
+        if (lifetime >= 0)
+        {
+            explode.Play();
+        }
+    }
+
 }

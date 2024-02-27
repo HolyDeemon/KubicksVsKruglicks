@@ -15,8 +15,8 @@ public class GunAnimator: MonoBehaviour
     }
     void Update()
     {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, Target_direction, 0.05f);
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, Target_rotation, 0.05f);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, Target_direction, Time.deltaTime * 10f);// 0.05f);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, Target_rotation, Time.deltaTime * 10f);// 0.05f) ;
         if (main.IsAiming)
         {
             camera.FOV = 50;
@@ -30,13 +30,13 @@ public class GunAnimator: MonoBehaviour
         if (main.IsOverWall)
         {
             Target_rotation.eulerAngles = new Vector3 (-5, -90, 0);
-            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 2f, Color.red);
+            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 1.7f, Color.red);
         }
         else
         {
             Target_rotation.eulerAngles = Vector3.zero;
             
-            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 2f, Color.blue); 
+            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 1.7f, Color.blue); 
         }
 
         if (main.ShootTrigger)

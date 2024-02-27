@@ -71,11 +71,12 @@ public class PlayerMover : MonoBehaviour
         if (IsSprinting && !gun.IsAiming)
         {
             sprintmultiplier = SprintMultiplier;
-            gun.IsOverWall = true;
+            gun.IsSprinting = true;
         }
         else
         {
             sprintmultiplier = 1f;
+            gun.IsSprinting = false;
         }
 
 
