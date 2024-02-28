@@ -20,6 +20,7 @@ public class PlayerAnimation : MonoBehaviour
         animator.SetFloat("Y", Input.GetAxisRaw("Vertical"));
         animator.SetFloat("horHeadRotation", 0);
         animator.SetFloat("verHeadRotation", -camera.rotX);
+        animator.SetBool("IsOnGround", Player.grounded);
 
     }
 
