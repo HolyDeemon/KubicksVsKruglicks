@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4046868059581804995}
   - component: {fileID: 8212676514262471808}
   - component: {fileID: 2124904435811346006}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Kruglik
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 591421809425010800}
-  m_Layer: 0
+  - component: {fileID: 8373393962531165014}
+  m_Layer: 3
   m_Name: enemy3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,3 +138,18 @@ Transform:
   - {fileID: 1445554423693521619}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8373393962531165014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3512020650797161948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4ffaa0431ae6e4ea887d8761822844, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHp: 0
+  maxHp: 75
+  isDead: 0
