@@ -24,14 +24,12 @@ public class PlayerMover : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    private bool grounded;
+    public bool grounded;
 
     public Transform orientation;
 
     private float horInput;
     private float verInput;
-    
-    
 
     private Vector3 moveDirection;
     public GunScript gun;

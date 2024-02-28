@@ -80,10 +80,10 @@ public class GunScript : MonoBehaviour
         {
             bulletEquped = "shot";
         }
-        if (Input.GetKeyDown(kc[5]))
+        /*if (Input.GetKeyDown(kc[5]))
         {
             bulletEquped = "explode";
-        }
+        }*/
     }
     public bool CheckWall(LayerMask Walls, float ray)
     {

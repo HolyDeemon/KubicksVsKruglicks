@@ -39,7 +39,7 @@ public class SpawnManager : MonoBehaviour
 
     private void Spawn()
     {
-        Vector3 position = new Vector3(UnityEngine.Random.Range(-spawnArea.x, spawnArea.x), 0f, UnityEngine.Random.Range(-spawnArea.z, spawnArea.z));
+        Vector3 position = new Vector3(UnityEngine.Random.Range(-spawnArea.x, spawnArea.x), 1f, UnityEngine.Random.Range(-spawnArea.z, spawnArea.z));
         
         switch (UnityEngine.Random.Range(0, 3))
         {
