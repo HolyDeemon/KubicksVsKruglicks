@@ -248,19 +248,20 @@ MonoBehaviour:
   moveSpeed: 7
   Drag: 5
   SprintMultiplier: 1.25
-  SprintKey: 304
   IsSprinting: 0
   TotalMovingSpeed: 0
   jupmForce: 7
   jumpCooldown: 0.25
   airMultiplier: 0.4
-  jumpKey: 32
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
+  grounded: 0
   orientation: {fileID: 444974366642360416}
   gun: {fileID: 0}
+  SprintKey: 304
+  jumpKey: 32
 --- !u!114 &-3235873558612461188
 MonoBehaviour:
   m_ObjectHideFlags: 0

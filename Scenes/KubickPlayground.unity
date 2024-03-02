@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -154,10 +154,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 208309956}
+  - component: {fileID: 208309957}
   - component: {fileID: 208309955}
   - component: {fileID: 208309954}
   - component: {fileID: 208309953}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,6 +251,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &208309957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208309952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b792b62ec327584bbe5dd54522da46e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy1: {fileID: 3512020650797161948, guid: a0d44008823c5d14fb7715d978aa1293, type: 3}
+  enemy2: {fileID: 3512020650797161948, guid: 430c6472b0760f94c923cf5ca74a1f5f, type: 3}
+  enemy3: {fileID: 3512020650797161948, guid: 32b1142ccb5eac64db2006489bc5d34b, type: 3}
+  spawnArea: {x: 125, y: 1.8, z: 125}
+  spawnTimer: 1
+  score: 0
+  maxscore: 15
+  enemy1score: 1
+  enemy2score: 5
+  enemy3score: 3
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,8 +705,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 45025458}
     - target: {fileID: 268095947204513547, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}
+      propertyPath: Drag
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 268095947204513547, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}
       propertyPath: SprintMultiplier
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 268095947204513547, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}
+      propertyPath: whatIsGround.m_Bits
+      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 444974366642360416, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -695,6 +726,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2646981878226099951, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2646981878226099951, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 7592249744334582711, guid: d1491ccfdfd38504d968bb6318603f7b, type: 3}

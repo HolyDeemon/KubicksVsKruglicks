@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PlayerMover : MonoBehaviour
+public class Mover : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed;
     public float Drag;
     private float sprintmultiplier = 1f;
     public float SprintMultiplier = 1.25f;
-    public KeyCode SprintKey = KeyCode.LeftShift;
     public bool IsSprinting;
     public float TotalMovingSpeed;
 
@@ -19,7 +18,6 @@ public class PlayerMover : MonoBehaviour
     public float jumpCooldown;
     public float airMultiplier;
     private bool readyToJump;
-    public KeyCode jumpKey = KeyCode.Space;
 
     [Header("Ground Check")]
     public float playerHeight;
@@ -35,35 +33,30 @@ public class PlayerMover : MonoBehaviour
     public GunScript gun;
     Rigidbody rb;
 
-    private void Start()
+    public void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
     }
-
-    private void Update()
+    public void MoverInput(Vector2 input, bool sprint, bool jump)
     {
+
+
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-        
-        PlayerInput();
         SpeedControl();
+
 
         if (grounded) { rb.drag = Drag; }
         else { rb.drag = 0; }
 
-    }
-    private void FixedUpdate()
-    {
-        MovePlayer();
-    }
+        //horInput = Input.GetAxisRaw("Horizontal");
+        //verInput = Input.GetAxisRaw("Vertical");
 
-    private void PlayerInput()
-    {
-        horInput = Input.GetAxisRaw("Horizontal");
-        verInput = Input.GetAxisRaw("Vertical");
+        horInput = input.x;
+        verInput = input.y;
 
-        IsSprinting = Input.GetKey(SprintKey) && verInput > 0;
+        IsSprinting = sprint && verInput > 0;
 
 
         if (IsSprinting && !gun.IsAiming)
@@ -78,24 +71,24 @@ public class PlayerMover : MonoBehaviour
         }
 
 
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        Debug.Log(grounded);
+
+        if (jump && readyToJump && grounded)
         {
             readyToJump = false;
 
             Jump();
-
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-
     }
 
-    private void MovePlayer()
+    public void MoveObject()
     {
         moveDirection = orientation.forward * verInput + orientation.right * horInput;
 
         var totalSpeed = moveSpeed * sprintmultiplier;
 
-        rb.AddForce(moveDirection * totalSpeed * 10f,ForceMode.Force);
+        rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force);
         if (grounded) { rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force); }
         else if (!grounded) { rb.AddForce(moveDirection * totalSpeed * 10f * airMultiplier, ForceMode.Force); }
 
@@ -117,7 +110,7 @@ public class PlayerMover : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x,0f,rb.velocity.z);
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
         rb.AddForce(transform.up * jupmForce, ForceMode.Impulse);
     }

@@ -21,7 +21,6 @@ public class BulletScript : MonoBehaviour
     {
         lifetime = Mathf.Clamp(lifetime - Time.deltaTime, 0, initiallifetime);
         lineRenderer.widthMultiplier = initialSize * (lifetime / initiallifetime);
-        Debug.Log(named);
         if (named == "explode")
         {
             SummonRocket(lineRenderer.GetPosition(0), explode.gameObject.transform.position);
@@ -47,11 +46,10 @@ public class BulletScript : MonoBehaviour
             SummonPiercedAir(START, TARGET);
         }
     }
-    public void SummonDirt(Vector3 position, Vector3 normal)
+    public void SummonDirt(Vector3 position, Vector3 normal, Vector3 normalized)
     {
         normal += position;
-        Vector3 targetPosition = Vector3.Project(position, normal).magnitude * normal * 2 + position;
-
+        Vector3 targetPosition = Vector3.Project(position, normal).magnitude * normal * 2 + position + normalized;
         var Dirt = particle[0];
         Dirt.gameObject.transform.position = position;
         Dirt.gameObject.transform.LookAt(targetPosition);

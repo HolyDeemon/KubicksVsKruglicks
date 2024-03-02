@@ -114,7 +114,7 @@ public class GunScript : MonoBehaviour
         if (Physics.Raycast(Gun.position, accuracy, out hit, bullets[BulletName][1]))
         {
             bullet.GetComponent<BulletScript>().BulletInitialiaze(BulletName, Gun.transform.position, hit.point);
-            bullet.GetComponent<BulletScript>().SummonDirt(hit.point, hit.normal);
+            bullet.GetComponent<BulletScript>().SummonDirt(hit.point, hit.normal, (hit.point - Gun.transform.position).normalized);
             return;
         }
         else
