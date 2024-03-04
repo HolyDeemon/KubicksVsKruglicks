@@ -9,44 +9,64 @@ public class EnemyMover : Mover
     public float AttackRange;
     public float MageFlyHeight;
 
+    private void Update()
+    {
+        MoveToPlayer();
+    }
+
     private void FixedUpdate()
     {
         MoveObject();
     }
 
-    public virtual void DefaultPattern()
+    public void MoveToPlayer()
     {
         Player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        orientation.LookAt(Player.transform.position);
+        Vector3 target = Player.position - transform.position;
+        target.Normalize();
 
-        MoverInput(Vector3.forward, false, false);
-    }
+        orientation.rotation = Quaternion.AngleAxis(Vector3.SignedAngle(Vector3.forward, target, Vector3.up), Vector3.up);
 
-    public virtual void MagePattern()
-    {
-        Player = GameObject.FindGameObjectWithTag("Player").transform;
+        Debug.DrawRay(transform.position, orientation.transform.forward, Color.blue);
 
-        orientation.LookAt(Player.transform.position);
-        
-        if((Player.transform.position - transform.position).magnitude <= AttackRange)
+        if(MageFlyHeight != 0)
         {
-            MoverInput(Vector3.right, false, false);
+            transform.position = new Vector3(transform.position.x, MageFlyHeight, transform.position.z);
+        }
+
+        if ((Player.transform.position - transform.position).magnitude < AttackRange / 2)
+        {
+            MoverInput(Vector2.down, false, false);
+        }
+        else if ((Player.transform.position - transform.position).magnitude > AttackRange)
+        {
+            if((Player.transform.position - transform.position).magnitude > AttackRange * 2f)
+            {
+                MoverInput(Vector2.up, true, false);
+            }
+            else
+            {
+                MoverInput(Vector2.up, false, false);
+            }
         }
         else
         {
-            MoverInput(Vector3.forward, false, false);
+            Vector3 vel = Vector3.zero;
+            if(MageFlyHeight != 0)
+            {
+                vel = Vector3.right * (Random.Range(0, 1) - 0.5f) * 2;
+            }
+            MoverInput(vel, false, false);
+            Attack();
         }
-
-        transform.position = new Vector3(transform.position.x, MageFlyHeight, transform.position.z);
     }
-    
-    public virtual void GruntPattern()
+
+    public virtual void Attack()
     {
-        Player = GameObject.FindGameObjectWithTag("Player").transform;
-
-        orientation.LookAt(Player.transform.position);
-
-        MoverInput(Vector3.forward, false, false);
+        
     }
+
+    
+
 }

@@ -30,8 +30,11 @@ public class Mover : MonoBehaviour
     private float verInput;
 
     private Vector3 moveDirection;
-    public GunScript gun;
+    public Weapon gun;
     Rigidbody rb;
+
+    public bool IsMage;
+
 
     public void Start()
     {
@@ -69,9 +72,6 @@ public class Mover : MonoBehaviour
             sprintmultiplier = 1f;
             gun.IsSprinting = false;
         }
-
-
-        Debug.Log(grounded);
 
         if (jump && readyToJump && grounded)
         {

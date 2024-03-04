@@ -1,26 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class GunScript : MonoBehaviour
+public class GunScript : Weapon
 {
     public KeyCode[] kc;
-    public FPS_Camera camera;
     public GameObject bulletPrefab;
     public Transform Gun;
     public LayerMask whatIsGround;
 
     public string bulletEquped = "default";
 
-    public bool IsAiming = false;
+    //public bool IsAiming = false;
     public bool IsOverWall = false;
     public bool ShootTrigger = false;
-    public bool IsSprinting = false;
-    
+    //public bool IsSprinting = false;
 
-    private Dictionary<string, List<float>> bulletDB = new Dictionary<string, List<float>>() // [0] - урон за попадание, [1] - дистанция, [2] - кд, [3] - разброс, [4]- кол во пуль; 
+    public FPS_Camera camera;
+
+    private Dictionary<string, List<float>> bulletDB = new Dictionary<string, List<float>>() // [0] - пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, [1] - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, [2] - пїЅпїЅ, [3] - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, [4]- пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ; 
     {
         {"default", new List<float>{5f, 1000f, 1f, 0f, 1f}}, 
         {"auto", new List<float>{2f, 20f, 0.2f, 5f, 1f}}, 
@@ -68,7 +65,7 @@ public class GunScript : MonoBehaviour
     }
     void WeaponSwapCheck()
     {
-        if (Input.GetKeyDown(kc[2]))
+            if (Input.GetKeyDown(kc[2]))
         {
             bulletEquped = "default";
         }

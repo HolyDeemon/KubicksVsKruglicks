@@ -9,6 +9,7 @@ public class GunAnimator: MonoBehaviour
     private Vector3 Target_direction = Vector3.zero;
     private Quaternion Target_rotation = Quaternion.identity;
     private FPS_Camera camera;
+
     private void Start()
     {
         camera = main.camera;
@@ -30,13 +31,10 @@ public class GunAnimator: MonoBehaviour
         if (main.IsOverWall)
         {
             Target_rotation.eulerAngles = new Vector3 (-5, -90, 0);
-            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 1.7f, Color.red);
         }
         else
         {
             Target_rotation.eulerAngles = Vector3.zero;
-            
-            Debug.DrawRay(transform.position, camera.gameObject.transform.forward * 1.7f, Color.blue); 
         }
 
         if (main.ShootTrigger)

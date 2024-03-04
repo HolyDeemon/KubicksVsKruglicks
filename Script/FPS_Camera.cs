@@ -46,7 +46,11 @@ public class FPS_Camera : MonoBehaviour
         rotX = Mathf.Clamp(rotX, -80f, 80f);
 
         transform.rotation = Quaternion.Euler(rotX - kickback, rotY, 0);
+        
         orientation.rotation = Quaternion.Euler(0, rotY, 0);
+        orientation.transform.position = Vector3.up * rotX;
+
+
         GetComponent<Camera>().fieldOfView = Mathf.Lerp(GetComponent<Camera>().fieldOfView, FOV + sprintfov, 0.01f);
     }
 
