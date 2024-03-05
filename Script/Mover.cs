@@ -33,34 +33,25 @@ public class Mover : MonoBehaviour
     public Weapon gun;
     Rigidbody rb;
 
-    public bool IsMage;
-
-
     public void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
     }
+
     public void MoverInput(Vector2 input, bool sprint, bool jump)
     {
-
-
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         SpeedControl();
 
-
         if (grounded) { rb.drag = Drag; }
         else { rb.drag = 0; }
-
-        //horInput = Input.GetAxisRaw("Horizontal");
-        //verInput = Input.GetAxisRaw("Vertical");
 
         horInput = input.x;
         verInput = input.y;
 
         IsSprinting = sprint && verInput > 0;
-
 
         if (IsSprinting && !gun.IsAiming)
         {
