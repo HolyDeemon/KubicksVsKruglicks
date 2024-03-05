@@ -264,8 +264,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy1: {fileID: 3512020650797161948, guid: a0d44008823c5d14fb7715d978aa1293, type: 3}
-  enemy2: {fileID: 3512020650797161948, guid: 430c6472b0760f94c923cf5ca74a1f5f, type: 3}
-  enemy3: {fileID: 3512020650797161948, guid: 32b1142ccb5eac64db2006489bc5d34b, type: 3}
+  enemy2: {fileID: 3512020650797161948, guid: 0db2c41b4c702bc42ad0385e31439972, type: 3}
+  enemy3: {fileID: 3512020650797161948, guid: 781d95f0fcb69e046a782336dc819b04, type: 3}
   spawnArea: {x: 125, y: 1.8, z: 125}
   spawnTimer: 1
   score: 0
@@ -584,7 +584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 591421809425010800, guid: a0d44008823c5d14fb7715d978aa1293, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3162289
+      value: 1.86
       objectReference: {fileID: 0}
     - target: {fileID: 591421809425010800, guid: a0d44008823c5d14fb7715d978aa1293, type: 3}
       propertyPath: m_LocalPosition.z
