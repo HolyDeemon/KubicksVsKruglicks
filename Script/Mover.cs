@@ -42,18 +42,20 @@ public class Mover : MonoBehaviour
 
     public void MoverInput(Vector2 input, bool sprint, bool jump)
     {
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround); //проверка нахождени€ игрока на земле с помощью Raycast.
-        SpeedControl();//функци€ контролирующа€ скорость игрока.
+        grounded = Physics.Raycast(transform.position - Vector3.down * 0.2f, Vector3.down, 0.21f, whatIsGround);
+        Debug.DrawRay(transform.position - Vector3.down * 0.2f, Vector3.down * 0.21f);
 
-        if (grounded) { rb.drag = Drag; } //проверка, позвол€юща€ примен€ть Drag только к наход€щимс€ на земле.
+        SpeedControl();
+
+        if (grounded) { rb.drag = Drag; }
         else { rb.drag = 0; }
 
         horInput = input.x;
         verInput = input.y;
 
-        IsSprinting = sprint && verInput > 0; //проверка, позвол€юща€ бежать только вперЄд.
+        IsSprinting = sprint && verInput > 0;
 
-        if (IsSprinting && !gun.IsAiming) //проверка, не позвол€юща€ бежать при прицеливании и отвечающа€ за корректное отображение анимации оружи€ при беге.
+        if (IsSprinting && !gun.IsAiming)
         {
             sprintmultiplier = SprintMultiplier;
             gun.IsSprinting = true;
@@ -64,7 +66,7 @@ public class Mover : MonoBehaviour
             gun.IsSprinting = false;
         }
 
-        if (jump && readyToJump && grounded) //проверка, исполн€ема€ при нажатии кнопки прыжка, вызывающа€ функцию отвечающую за прыжок и работает с откатом прыжка.
+        if (jump && readyToJump && grounded)
         {
             readyToJump = false;
 
@@ -75,24 +77,24 @@ public class Mover : MonoBehaviour
 
     public void MoveObject()
     {
-        moveDirection = orientation.forward * verInput + orientation.right * horInput; //вычисление направлени€ движени€.
+        moveDirection = orientation.forward * verInput + orientation.right * horInput;
 
-        var totalSpeed = moveSpeed * sprintmultiplier; //домножение скорости на умножитель бега, равный нулю при не нажатой кнопке бега.
+        var totalSpeed = moveSpeed * sprintmultiplier;
 
-        rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force); //примен€ем силу к Rigidbody дл€ перемещени€ объекта в заданном направлении.
-        if (grounded) { rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force); } //проверка, добавл€юща€ множитель нахождени€ в воздухе только когда движущийс€ находитс€ в воздухе.
+        rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force);
+        if (grounded) { rb.AddForce(moveDirection * totalSpeed * 10f, ForceMode.Force); }
         else if (!grounded) { rb.AddForce(moveDirection * totalSpeed * 10f * airMultiplier, ForceMode.Force); }
 
-        TotalMovingSpeed = rb.velocity.magnitude / moveSpeed; //вычисл€ем относительную скорость объекта делением вектора скорости на базовую скорость.
+        TotalMovingSpeed = rb.velocity.magnitude / moveSpeed;
     }
 
     private void SpeedControl()
     {
-        var totalSpeed = moveSpeed * sprintmultiplier;//вычисл€ем общую скорость объекта.
+        var totalSpeed = moveSpeed * sprintmultiplier;
 
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z); //создаем новый вектор flatVel, содержащий только горизонтальные компоненты скорости объекта.
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        if (flatVel.magnitude > moveSpeed) //проверка, не дающа€ скорости объекта превысить лимит.
+        if (flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * totalSpeed;
             rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
@@ -101,11 +103,11 @@ public class Mover : MonoBehaviour
 
     private void Jump()
     {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);//при вызове функции обнул€ем вертикальную скорость объекта, чтобы избежать накоплени€ вертикальной скорости.
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        rb.AddForce(transform.up * jupmForce, ForceMode.Impulse);//примен€ем силу вверх по направлению объекта.
+        rb.AddForce(transform.up * jupmForce, ForceMode.Impulse);
     }
-    private void ResetJump() //небольша€ функци€, переключающа€ флаг позвол€ющий прыгать.
+    private void ResetJump()
     {
         readyToJump = true;
     }

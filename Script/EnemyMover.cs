@@ -55,7 +55,7 @@ public class EnemyMover : Mover
             Vector3 vel = Vector3.zero;
             if(MageFlyHeight != 0)
             {
-                vel = Vector3.right * (Random.Range(0, 1) - 0.5f) * 2;
+                vel = Vector3.right;
             }
             MoverInput(vel, false, false);
             Attack();

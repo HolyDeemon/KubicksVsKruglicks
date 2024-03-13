@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    public bool IsEnemy = false;
     public Transform Orientation;
     public Mover Player;
     public Animator animator;

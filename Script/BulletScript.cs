@@ -11,7 +11,7 @@ public class BulletScript : MonoBehaviour
     private LineRenderer lineRenderer;
 
     public ParticleSystem[] particle;
-    public GameObject explodePrefab;
+    public GameObject bloodPrefab;
     private ParticleSystem explode;
     private float initialSize;
     private float initiallifetime;
@@ -21,10 +21,6 @@ public class BulletScript : MonoBehaviour
     {
         lifetime = Mathf.Clamp(lifetime - Time.deltaTime, 0, initiallifetime);
         lineRenderer.widthMultiplier = initialSize * (lifetime / initiallifetime);
-        if (named == "explode")
-        {
-            SummonRocket(lineRenderer.GetPosition(0), explode.gameObject.transform.position);
-        }
         if (lifetime <= 0)
         {
             Destroy(gameObject);
@@ -49,10 +45,10 @@ public class BulletScript : MonoBehaviour
     public void SummonDirt(Vector3 position, Vector3 normal, Vector3 normalized)
     {
         normal += position;
-        Vector3 targetPosition = Vector3.Project(position, normal).magnitude * normal * 2 + position + normalized;
+        //Vector3 targetPosition = Vector3.Project(position, normal).magnitude * normal * 2 + position + normalized;
         var Dirt = particle[0];
         Dirt.gameObject.transform.position = position;
-        Dirt.gameObject.transform.LookAt(targetPosition);
+        //Dirt.gameObject.transform.LookAt(targetPosition);
         Dirt.Play();
     }
 
@@ -66,16 +62,11 @@ public class BulletScript : MonoBehaviour
         }
     }
 
-    public void SummonRocket(Vector3 start, Vector3 end)
+    public void SummonBlood(Vector3 position)
     {
-        var rocketStar = particle[2];
-        rocketStar.Play();
-        rocketStar.gameObject.transform.position = start + (start - end).normalized * (1 - (lifetime / initiallifetime));
-        lineRenderer.SetPosition(1, rocketStar.gameObject.transform.position);
-        if (lifetime >= 0)
-        {
-            explode.Play();
-        }
+        var blood = Instantiate(bloodPrefab, gameObject.transform);
+        blood.transform.position = position;
+        blood.GetComponent<ParticleSystem>().Play();
     }
 
 }

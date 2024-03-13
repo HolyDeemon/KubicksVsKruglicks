@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
+    public string EntityName;
     public float currentHp;
     public float maxHp;
     public bool isDead;
+
+    public UIHealt hpbar;
+
+    public SpawnManager spawnManager;
 
     private void Start()
     {
@@ -17,6 +22,11 @@ public class HealthManager : MonoBehaviour
     public void TakingDamage(float damage)
     {
         currentHp -= damage;
-        if (currentHp <= 0) { isDead = true; }
+        if (currentHp <= 0) { isDead = true; spawnManager.KillEntity(gameObject); }
+
+        if(hpbar != null)
+        {
+            hpbar.ChangeHP(currentHp);
+        }
     }
 }

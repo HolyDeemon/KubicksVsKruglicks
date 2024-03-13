@@ -40,7 +40,7 @@ public class GunAnimator: MonoBehaviour
         if (main.ShootTrigger)
         {
             main.ShootTrigger = false;
-            if(main.bulletEquped == "auto")
+            if(main.pm.bulletEquped == "Auto")
             {
                 LightShoot();
             }

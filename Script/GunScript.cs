@@ -8,8 +8,6 @@ public class GunScript : Weapon
     public Transform Gun;
     public LayerMask whatIsGround;
 
-    public string bulletEquped = "default";
-
     //public bool IsAiming = false;
     public bool IsOverWall = false;
     public bool ShootTrigger = false;
@@ -17,88 +15,82 @@ public class GunScript : Weapon
 
     public FPS_Camera camera;
 
-    private Dictionary<string, List<float>> bulletDB = new Dictionary<string, List<float>>() // [0] - ���� �� ���������, [1] - ���������, [2] - ��, [3] - �������, [4]- ��� �� ����; 
-    {
-        {"default", new List<float>{5f, 1000f, 1f, 0f, 1f}}, 
-        {"auto", new List<float>{2f, 20f, 0.2f, 5f, 1f}}, 
-        {"shot", new List<float>{1f, 5f, 2f, 45f, 10f}}, 
-        {"explode", new List<float>{10f, 20f, 4f, 0f, 1f}}
-    };
-    public Dictionary<string, float> Reloads = new Dictionary<string, float>()
-    {
-        {"default", 0f},
-        {"auto", 0f},
-        {"shot", 0f},
-        {"explode", 0f}
-    };
+    public PlayerManager pm;
 
     void Update()
     {
-        WeaponSwapCheck();
-
         IsAiming = Input.GetKey(kc[1]);
         IsOverWall = CheckWall(whatIsGround, 1.7f) || IsSprinting;
 
-        if(bulletEquped == "auto")
+        WeaponChange();
+
+        if (pm.bulletCount[pm.bulletEquped] > 0 || pm.bulletEquped == "Default")
         {
-            if (Input.GetKey(kc[0]) && !IsOverWall && Reloads["auto"] == 0f)
+            if (pm.bulletEquped == "Auto")
             {
-                ShootTrigger = true;
-                Shoot(bulletEquped);
+                if (Input.GetKey(kc[0]) && !IsOverWall && pm.Reloads["Auto"] == 0f)
+                {
+                    ShootTrigger = true;
+                    Shoot(pm.bulletEquped);
+                }
             }
-        }
-        else
-        {
-            if (Input.GetKeyDown(kc[0]) && !IsOverWall && Reloads[bulletEquped] == 0f)
+            else
             {
-                ShootTrigger = true;
-                Shoot(bulletEquped);
+                if (Input.GetKeyDown(kc[0]) && !IsOverWall && pm.Reloads[pm.bulletEquped] == 0f)
+                {
+                    ShootTrigger = true;
+                    Shoot(pm.bulletEquped);
+                }
             }
         }
 
         Dictionary<string, float> ReloadTMP = new Dictionary<string, float>();
-        foreach (KeyValuePair<string, float> key in Reloads)
+        foreach (KeyValuePair<string, float> key in pm.Reloads)
         {
             ReloadTMP.Add(key.Key, Mathf.Clamp(key.Value - Time.deltaTime, 0f, 1000f));
         }
-        Reloads = ReloadTMP;
+        pm.Reloads = ReloadTMP;
+
+        pm.inventory.text = pm.UpdateGun("Default");
+        pm.inventory.text += pm.UpdateGun("Auto");
+        pm.inventory.text += pm.UpdateGun("Shotgun");
     }
-    void WeaponSwapCheck()
+
+    public void WeaponChange()
     {
-            if (Input.GetKeyDown(kc[2]))
+        if (Input.GetKey(kc[2]))
         {
-            bulletEquped = "default";
+            pm.bulletEquped = "Default";
         }
-        if (Input.GetKeyDown(kc[3]))
+        if (Input.GetKey(kc[3]))
         {
-            bulletEquped = "auto";
+            pm.bulletEquped = "Auto";
         }
-        if (Input.GetKeyDown(kc[4]))
+        if (Input.GetKey(kc[4]))
         {
-            bulletEquped = "shot";
+            pm.bulletEquped = "Shotgun";
         }
-        /*if (Input.GetKeyDown(kc[5]))
-        {
-            bulletEquped = "explode";
-        }*/
     }
+
+
     public bool CheckWall(LayerMask Walls, float ray)
     {
         return Physics.Raycast(transform.position, camera.gameObject.transform.forward, ray, Walls);
     }
     void Shoot(string name)
     {
+        pm.bulletCount[name] = Mathf.Clamp(pm.bulletCount[name] - 1, 0, pm.bulletCount[name] + 1);
         float AimPenalty = 1f;
         if (IsAiming)
         {
             AimPenalty = 1.5f;
         }
 
-        Reloads[name] = bulletDB[name][2] * AimPenalty;
+        pm.Reloads[name] = pm.bulletDB[name][2] * AimPenalty;
 
-        for (int i = 0; i < bulletDB[name][4]; i++)
+        for (int i = 0; i < pm.bulletDB[name][4]; i++)
         {
-            BulletRaycast(name, bulletDB);
+            BulletRaycast(name, pm.bulletDB);
         }
     }
     void BulletRaycast(string BulletName, Dictionary<string, List<float>> bullets)
@@ -111,15 +103,25 @@ public class GunScript : Weapon
         if (Physics.Raycast(Gun.position, accuracy, out hit, bullets[BulletName][1]))
         {
             bullet.GetComponent<BulletScript>().BulletInitialiaze(BulletName, Gun.transform.position, hit.point);
-            bullet.GetComponent<BulletScript>().SummonDirt(hit.point, hit.normal, (hit.point - Gun.transform.position).normalized);
-            return;
+
+            try
+            {
+                var enemy = hit.collider.gameObject.transform.parent;
+
+                if (enemy.tag == "enemy")
+                {
+                    enemy.GetComponentInParent<HealthManager>().TakingDamage(bullets[BulletName][0]);
+                    bullet.GetComponent<BulletScript>().SummonBlood(hit.point);
+                }
+            }
+            catch
+            {
+                bullet.GetComponent<BulletScript>().SummonDirt(hit.point, hit.normal, (hit.point - Gun.transform.position).normalized);
+            }
         }
         else
         {
             bullet.GetComponent<BulletScript>().BulletInitialiaze(BulletName, Gun.position, accuracy * bullets[BulletName][1] + Gun.position);
         }
-
-
-        
     }
 }
