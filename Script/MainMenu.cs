@@ -7,7 +7,7 @@ public class NewBehaviourScript : MonoBehaviour
 {
     public void Play()
     {
-        SceneManager.LoadSceneAsync("KubickPlayground");
+        SceneManager.LoadScene("KubickPlayground");
     }
 
     public void Quit()

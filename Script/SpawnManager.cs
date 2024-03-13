@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -69,6 +70,11 @@ public class SpawnManager : MonoBehaviour
 
     public void KillEntity(GameObject enemy)
     {
+        if(enemy.tag == "Player")
+        {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("Menu");
+        }
         var smoke = Instantiate(SmokePrefab);
         smoke.GetComponent<ParticleSystem>().Play();
         smoke.transform.position = enemy.transform.position;

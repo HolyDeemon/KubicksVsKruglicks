@@ -29,4 +29,8 @@ public class UIHealt : MonoBehaviour
         Hp.text = value + " HP";
     }
 
+    public void Warning()
+    {
+        Pulsing = true;
+    }
 }

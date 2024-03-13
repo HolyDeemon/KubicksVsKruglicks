@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FPS_Camera : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class FPS_Camera : MonoBehaviour
     public float FOV = 75f;
     public float SprintFov;
 
-
+    public KeyCode escapeButton = KeyCode.Escape;
 
     private void Start()
     {
@@ -28,6 +29,13 @@ public class FPS_Camera : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(escapeButton))
+        {
+            Cursor.lockState = CursorLockMode.None;
+            SceneManager.LoadScene("Menu");
+        }
+
+
         float sprintfov = 0;
         if (Player.IsSprinting)
         {

@@ -28,5 +28,9 @@ public class HealthManager : MonoBehaviour
         {
             hpbar.ChangeHP(currentHp);
         }
+        if (currentHp <= maxHp / 3)
+        {
+            hpbar.Warning();
+        }
     }
 }

@@ -13,7 +13,7 @@ public class PlayerManager : HealthManager
     {
         {"Default", new List<float>{5f, 1000f, 1f, 0f, 1f}},
         {"Auto", new List<float>{4f, 20f, 0.2f, 5f, 1f}},
-        {"Shotgun", new List<float>{10f, 5f, 2f, 45f, 10f}},
+        {"Shotgun", new List<float>{8f, 8f, 2f, 35f, 10f}},
         {"explode", new List<float>{10f, 20f, 4f, 0f, 1f}}
     };
 
