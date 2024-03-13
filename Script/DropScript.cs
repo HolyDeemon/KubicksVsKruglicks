@@ -8,6 +8,8 @@ public class DropScript : MonoBehaviour
     public MeshRenderer Bullet;
 
     private float spiningTick;
+    public LayerMask whatIsGround;
+    public float FallSpeed;
 
     public string Name;
     public int count;
@@ -20,6 +22,10 @@ public class DropScript : MonoBehaviour
 
         BulletOrigin.transform.localPosition = new Vector3(0, Mathf.Cos(spiningTick)/5, 0);
         BulletOrigin.transform.Rotate(Vector3.up, Time.deltaTime * 30);
+        if (Physics.Raycast(transform.position - Vector3.down * 0.2f, Vector3.down * FallSpeed * Time.deltaTime, 0.21f, whatIsGround))
+        {
+            transform.position = transform.position + Vector3.down * FallSpeed * Time.deltaTime;
+        }
     }
 
     public void CreateBullet(string NAME, int COUNT)

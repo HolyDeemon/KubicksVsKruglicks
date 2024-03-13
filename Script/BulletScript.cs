@@ -31,24 +31,34 @@ public class BulletScript : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
 
-        initialSize = lineRenderer.widthMultiplier;
-        initiallifetime = lifetime;
-        named = NAME;
-        lineRenderer.SetPosition(0, START);
-        lineRenderer.SetPosition(1, TARGET);
-
-        if (name != "shot" || name != "explode")
+        if (NAME != "club" && NAME != "sickle")
         {
+
+            if (NAME == "Arcanum")
+            {
+                GradientColorKey[] keys = new GradientColorKey[2] { new GradientColorKey(), new GradientColorKey()};
+                keys[0].color = Color.magenta;
+                keys[1].color = Color.magenta;
+                lineRenderer.colorGradient.SetKeys(keys, lineRenderer.colorGradient.alphaKeys);
+            }
+
+            initialSize = lineRenderer.widthMultiplier;
+            initiallifetime = lifetime;
+            named = NAME;
+            lineRenderer.SetPosition(0, START);
+            lineRenderer.SetPosition(1, TARGET);
             SummonPiercedAir(START, TARGET);
         }
+        else
+        {
+            lineRenderer.SetPosition(0, Vector3.zero);
+            lineRenderer.SetPosition(1, Vector3.zero);
+        }
     }
-    public void SummonDirt(Vector3 position, Vector3 normal, Vector3 normalized)
+    public void SummonDirt(Vector3 position)
     {
-        normal += position;
-        //Vector3 targetPosition = Vector3.Project(position, normal).magnitude * normal * 2 + position + normalized;
         var Dirt = particle[0];
         Dirt.gameObject.transform.position = position;
-        //Dirt.gameObject.transform.LookAt(targetPosition);
         Dirt.Play();
     }
 

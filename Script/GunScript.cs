@@ -4,7 +4,6 @@ using UnityEngine;
 public class GunScript : Weapon
 {
     public KeyCode[] kc;
-    public GameObject bulletPrefab;
     public Transform Gun;
     public LayerMask whatIsGround;
 
@@ -90,10 +89,10 @@ public class GunScript : Weapon
 
         for (int i = 0; i < pm.bulletDB[name][4]; i++)
         {
-            BulletRaycast(name, pm.bulletDB);
+            BulletRaycast(name, pm.bulletDB, Gun);
         }
     }
-    void BulletRaycast(string BulletName, Dictionary<string, List<float>> bullets)
+    /*void BulletRaycast(string BulletName, Dictionary<string, List<float>> bullets)
     {
         Vector3 accuracy = Quaternion.Euler(Random.Range(0, bullets[BulletName][3] * 2) - bullets[BulletName][3], Random.Range(0, bullets[BulletName][3] * 2) - bullets[BulletName][3], 0) * transform.forward;
         var bullet = Instantiate(bulletPrefab);
@@ -123,5 +122,5 @@ public class GunScript : Weapon
         {
             bullet.GetComponent<BulletScript>().BulletInitialiaze(BulletName, Gun.position, accuracy * bullets[BulletName][1] + Gun.position);
         }
-    }
+    }*/
 }

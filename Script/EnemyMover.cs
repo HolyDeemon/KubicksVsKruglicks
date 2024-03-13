@@ -9,6 +9,7 @@ public class EnemyMover : Mover
     public float AttackRange;
     public float MageFlyHeight;
 
+
     private void Update()
     {
         MoveToPlayer();
@@ -58,15 +59,7 @@ public class EnemyMover : Mover
                 vel = Vector3.right;
             }
             MoverInput(vel, false, false);
-            Attack();
+            gun.Attack();
         }
     }
-
-    public virtual void Attack()
-    {
-        
-    }
-
-    
-
 }
